@@ -4,6 +4,7 @@
 package grapher.ui;
 
 import java.awt.Cursor;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -26,6 +27,8 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_grapher = grapher;
 		m_frame = frame;
 		m_button = MouseEvent.NOBUTTON;
+		m_start = new Point(0,0);
+		m_end = new Point(0,0);
 	}
 
 	@Override
@@ -80,11 +83,17 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		if (m_button == MouseEvent.BUTTON1) {
+		if (m_button == MouseEvent.BUTTON1)
 			m_grapher.translate(-m_x + e.getX(), -m_y + e.getY());
-			m_x = e.getX();
-			m_y = e.getY();
+		
+		m_x = e.getX();
+		m_y = e.getY();
+		
+		if (m_button == MouseEvent.BUTTON3) {
+			m_end.setLocation(m_x, m_y);
+			m_grapher.drawRectangle(m_start, m_end);
 		}
+		
 		m_state = MouseEvent.MOUSE_DRAGGED;
 	}
 
