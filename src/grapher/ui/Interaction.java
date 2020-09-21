@@ -14,14 +14,18 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JFrame;
 
 public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener {
-	
+
 	Grapher m_grapher;
 	JFrame m_frame;
 	int m_x, m_y;
-	
-	public Interaction(Grapher grapher, JFrame frame){
+	int m_button;
+	int m_state;
+	Point m_start, m_end;
+
+	public Interaction(Grapher grapher, JFrame frame) {
 		m_grapher = grapher;
 		m_frame = frame;
+		m_button = MouseEvent.NOBUTTON;
 	}
 
 	@Override
@@ -33,40 +37,55 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Point p = new Point(e.getX(), e.getY());
-		m_grapher.zoom(p, 10);
+		if (e.getButton() == MouseEvent.BUTTON1)
+			m_grapher.zoom(p, 5);
+		else if (e.getButton() == MouseEvent.BUTTON3)
+			m_grapher.zoom(p, -5);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			m_frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		} else if (e.getButton() == MouseEvent.BUTTON3){
+			m_button = MouseEvent.BUTTON1;
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
 			m_frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+			m_button = MouseEvent.BUTTON3;
+			m_start = new Point(e.getX(), e.getY());
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		m_frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		if (m_button == MouseEvent.BUTTON3 && m_state == MouseEvent.MOUSE_DRAGGED) {
+			m_end = new Point(e.getX(), e.getY());
+			m_grapher.zoom(m_start, m_end);
+		}
+		m_button = MouseEvent.NOBUTTON;
+		m_state = MouseEvent.NOBUTTON;
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		m_grapher.translate(- m_x + e.getX(),- m_y + e.getY());
-		m_x = e.getX();
-		m_y = e.getY();
+		if (m_button == MouseEvent.BUTTON1) {
+			m_grapher.translate(-m_x + e.getX(), -m_y + e.getY());
+			m_x = e.getX();
+			m_y = e.getY();
+		}
+		m_state = MouseEvent.MOUSE_DRAGGED;
 	}
 
 	@Override
@@ -75,5 +94,4 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_y = e.getY();
 	}
 
-	
 }
