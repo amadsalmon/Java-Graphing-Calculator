@@ -5,8 +5,6 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import grapher.fc.Interaction;
-
 
 public class Main extends JFrame {
 	Main(String title, String[] expressions) {
@@ -18,7 +16,7 @@ public class Main extends JFrame {
 			grapher.add(expression);
 		}
 		
-		Interaction i = new Interaction(this);
+		Interaction i = new Interaction(grapher,this);
 		grapher.addMouseListener(i);
 		grapher.addMouseMotionListener((MouseMotionListener) i);
 		

@@ -1,32 +1,40 @@
 /**
  * 
  */
-package grapher.fc;
+package grapher.ui;
 
 import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JFrame;
 
-public class Interaction implements MouseListener, MouseMotionListener {
+public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener {
 	
+	Grapher m_grapher;
 	JFrame m_frame;
+	int m_x, m_y;
 	
-	public Interaction(JFrame frame) {
-		super();
-		this.m_frame = frame;
+	public Interaction(Grapher grapher, JFrame frame){
+		m_grapher = grapher;
+		m_frame = frame;
 	}
-	
-	public void CursorMouseMotionListener(JFrame frame){
-	        
-	    }
 	 
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("clicked");
+		Point p = new Point(e.getX(), e.getY());
+		m_grapher.zoom(p, 10);
 	}
 
 	@Override
@@ -57,13 +65,16 @@ public class Interaction implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		
+		m_grapher.translate(- m_x + e.getX(),- m_y + e.getY());
+		m_x = e.getX();
+		m_y = e.getY();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		
-		
+		m_x = e.getX();
+		m_y = e.getY();
 	}
+
 	
 }
