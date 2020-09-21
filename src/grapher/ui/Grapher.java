@@ -35,6 +35,9 @@ public class Grapher extends JPanel {
 	
 	protected double xmin, xmax;
 	protected double ymin, ymax;
+	
+	protected int m_rectX, m_rectY, m_rectW, m_rectH;
+	protected boolean m_drawR;
 
 	protected Vector<Function> functions;
 	
@@ -125,6 +128,11 @@ public class Grapher extends JPanel {
 		for(BigDecimal x = xstep.negate(); x.doubleValue() > xmin; x = x.subtract(xstep)) { drawXTick(g2, x); }
 		for(BigDecimal y = ystep; y.doubleValue() < ymax; y = y.add(ystep))  { drawYTick(g2, y); }
 		for(BigDecimal y = ystep.negate(); y.doubleValue() > ymin; y = y.subtract(ystep)) { drawYTick(g2, y); }
+	
+		if(m_drawR) {
+			g2.drawRect(m_rectX, m_rectY, m_rectW, m_rectH);
+			m_drawR = false;
+		}
 	}
 	
 	protected double dx(int dX) { return  (double)((xmax-xmin)*dX/W); }
@@ -170,7 +178,6 @@ public class Grapher extends JPanel {
 		return value.movePointRight(scale);
 	}
 
-	
 
 	protected void translate(int dX, int dY) {
 		double dx = dx(dX);
@@ -198,4 +205,14 @@ public class Grapher extends JPanel {
 		ymin = min(y0, y1); ymax = max(y0, y1);
 		repaint();
 	}
+	
+	protected void drawRectangle(Point p0, Point p1) {
+		m_rectX = p0.x;
+		m_rectY = p0.y;
+		m_rectW = p1.x - p0.x;
+		m_rectH  = p1.y - p0.y;
+		m_drawR = true;
+		repaint();
+	}
+	
 }
