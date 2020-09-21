@@ -1,7 +1,11 @@
 package grapher.ui;
 
+import java.awt.event.MouseMotionListener;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+
+import grapher.fc.Interaction;
 
 
 public class Main extends JFrame {
@@ -13,6 +17,10 @@ public class Main extends JFrame {
 		for(String expression : expressions) {
 			grapher.add(expression);
 		}
+		
+		Interaction i = new Interaction(this);
+		grapher.addMouseListener(i);
+		grapher.addMouseMotionListener((MouseMotionListener) i);
 		
 		add(grapher);
 		pack();
