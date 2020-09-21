@@ -1,7 +1,5 @@
 package grapher.ui;
 
-import java.awt.event.MouseMotionListener;
-
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -15,8 +13,9 @@ public class Main extends JFrame {
 		for(String expression : expressions) {
 			grapher.add(expression);
 		}
-		
+
 		Interaction i = new Interaction(grapher,this);
+		grapher.setInteraction(i);
 		grapher.addMouseListener(i);
 		grapher.addMouseMotionListener(i);
 		grapher.addMouseWheelListener(i);
