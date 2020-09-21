@@ -38,6 +38,7 @@ public class Main extends JFrame {
 		grapher.setMinimumSize(minimumSize2);
 		
 		Interaction i = new Interaction(grapher,this);
+		grapher.setInteraction(i);
 		grapher.addMouseListener(i);
 		grapher.addMouseMotionListener(i);
 		grapher.addMouseWheelListener(i);
