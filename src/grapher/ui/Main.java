@@ -18,7 +18,7 @@ public class Main extends JFrame {
 		
 		Interaction i = new Interaction(grapher,this);
 		grapher.addMouseListener(i);
-		grapher.addMouseMotionListener((MouseMotionListener) i);
+		grapher.addMouseMotionListener(i);
 		
 		add(grapher);
 		pack();
