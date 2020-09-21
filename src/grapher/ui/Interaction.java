@@ -23,12 +23,11 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_grapher = grapher;
 		m_frame = frame;
 	}
-	 
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		// TODO Auto-generated method stub
-		
+		Point p = new Point(e.getX(), e.getY());
+		m_grapher.zoom(p, e.getWheelRotation()); // Effectue zoom relatif au taux de scroll et centré sur p le curseur de la souris. 
 	}
 
 	@Override
