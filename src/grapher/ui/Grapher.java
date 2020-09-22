@@ -38,6 +38,7 @@ public class Grapher extends JPanel {
 	
 	protected int m_rectX, m_rectY, m_rectW, m_rectH;
 	protected boolean m_drawR;
+	public Function m_selectedFunction;
 
 	protected Vector<Function> functions;
 	
@@ -46,6 +47,7 @@ public class Grapher extends JPanel {
 		ymin = -1.5;   ymax = 1.5;
 		
 		functions = new Vector<Function>();
+		m_selectedFunction = null;
 	}
 	
 	public void add(String expression) {
@@ -110,8 +112,11 @@ public class Grapher extends JPanel {
 			for(int i = 0; i < N; i++) {
 				Ys[i] = Y(f.y(xs[i]));
 			}
-			
+			if (f==m_selectedFunction) {
+				g2.setStroke(new BasicStroke(5));
+			}
 			g2.drawPolyline(Xs, Ys, N);
+			g2.setStroke(new BasicStroke(1.5f));
 		}
 
 		g2.setClip(null);

@@ -1,12 +1,14 @@
 package grapher.ui;
 
 import java.awt.Dimension;
+import java.awt.event.ComponentListener;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionListener;
 
 import grapher.fc.Function;
 
@@ -37,11 +39,12 @@ public class Main extends JFrame {
 		Dimension minimumSize2 = new Dimension(100, 50);
 		grapher.setMinimumSize(minimumSize2);
 		
-		Interaction i = new Interaction(grapher,this);
+		Interaction i = new Interaction(splitPane,this);
 		grapher.addMouseListener(i);
 		grapher.addMouseMotionListener(i);
 		grapher.addMouseWheelListener(i);
-		
+		listScrollPane.addListSelectionListener(i);
+				
 		add(splitPane);
 		pack();
 	}
