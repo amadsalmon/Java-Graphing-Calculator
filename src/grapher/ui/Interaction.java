@@ -4,7 +4,7 @@
 package grapher.ui;
 
 import java.awt.Cursor;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -101,11 +101,7 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_x = e.getX();
 		m_y = e.getY();
 		
-		if (m_button == MouseEvent.BUTTON3) {
-			m_end.setLocation(m_x, m_y);
-			m_grapher.drawRectangle(m_start, m_end);
-		}
-		
+		m_end.setLocation(m_x, m_y);
 		m_state = MouseEvent.MOUSE_DRAGGED;
 	}
 
@@ -113,6 +109,21 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 	public void mouseMoved(MouseEvent e) {
 		m_x = e.getX();
 		m_y = e.getY();
+	}
+	
+	public void draw(Graphics2D g) {
+		if(m_state == MouseEvent.MOUSE_DRAGGED && m_button == MouseEvent.BUTTON3) {
+			if(m_end.x - m_start.x >= 0 && m_end.y - m_start.y >= 0)
+				g.drawRect(m_start.x, m_start.y, m_end.x - m_start.x, m_end.y - m_start.y);
+			else if (m_end.x - m_start.x < 0 && m_end.y - m_start.y >= 0) {
+				g.drawRect(m_end.x, m_start.y, m_start.x - m_end.x, m_end.y - m_start.y);
+			} else if (m_end.x - m_start.x >= 0 && m_end.y - m_start.y < 0) {
+				g.drawRect(m_start.x, m_end.y, m_end.x - m_start.x, m_start.y - m_end.y);
+			} else {
+				g.drawRect(m_end.x, m_end.y, m_start.x - m_end.x, m_start.y - m_end.y);
+			}
+		}
+		m_grapher.repaint();
 	}
 
 	@Override

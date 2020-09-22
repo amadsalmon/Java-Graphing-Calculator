@@ -29,7 +29,9 @@ public class Grapher extends JPanel {
 	                                                   1.f,
 	                                                   new float[] { 4.f, 4.f },
 	                                                   0.f);
-	                                                   
+	 
+	protected Interaction m_interaction;
+	
 	protected int W = 400;
 	protected int H = 300;
 	
@@ -48,6 +50,10 @@ public class Grapher extends JPanel {
 		
 		functions = new Vector<Function>();
 		m_selectedFunction = null;
+	}
+	
+	public void setInteraction(Interaction i) {
+		m_interaction = i;
 	}
 	
 	public void add(String expression) {
@@ -133,11 +139,8 @@ public class Grapher extends JPanel {
 		for(BigDecimal x = xstep.negate(); x.doubleValue() > xmin; x = x.subtract(xstep)) { drawXTick(g2, x); }
 		for(BigDecimal y = ystep; y.doubleValue() < ymax; y = y.add(ystep))  { drawYTick(g2, y); }
 		for(BigDecimal y = ystep.negate(); y.doubleValue() > ymin; y = y.subtract(ystep)) { drawYTick(g2, y); }
-	
-		if(m_drawR) {
-			g2.drawRect(m_rectX, m_rectY, m_rectW, m_rectH);
-			m_drawR = false;
-		}
+		
+		m_interaction.draw(g2);
 	}
 	
 	protected double dx(int dX) { return  (double)((xmax-xmin)*dX/W); }
@@ -208,15 +211,6 @@ public class Grapher extends JPanel {
 		double y1 = y(p1.y);
 		xmin = min(x0, x1); xmax = max(x0, x1);
 		ymin = min(y0, y1); ymax = max(y0, y1);
-		repaint();
-	}
-	
-	protected void drawRectangle(Point p0, Point p1) {
-		m_rectX = p0.x;
-		m_rectY = p0.y;
-		m_rectW = p1.x - p0.x;
-		m_rectH  = p1.y - p0.y;
-		m_drawR = true;
 		repaint();
 	}
 	

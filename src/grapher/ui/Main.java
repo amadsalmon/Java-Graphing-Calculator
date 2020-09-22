@@ -39,7 +39,10 @@ public class Main extends JFrame {
 		Dimension minimumSize2 = new Dimension(100, 50);
 		grapher.setMinimumSize(minimumSize2);
 		
+
 		Interaction i = new Interaction(splitPane,this);
+
+		grapher.setInteraction(i);
 		grapher.addMouseListener(i);
 		grapher.addMouseMotionListener(i);
 		grapher.addMouseWheelListener(i);
