@@ -1,12 +1,16 @@
 package grapher.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ComponentListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionListener;
 
@@ -17,7 +21,6 @@ public class Main extends JFrame {
 	Main(String title, String[] expressions) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
 		
 		
 		Grapher grapher = new Grapher();	
@@ -39,6 +42,16 @@ public class Main extends JFrame {
 		Dimension minimumSize2 = new Dimension(100, 50);
 		grapher.setMinimumSize(minimumSize2);
 		
+
+		JToolBar toolbar = new JToolBar();
+	    toolbar.setRollover(true);
+	    toolbar.setFloatable(false);
+	    JButton minusButton = new JButton("-");
+	    JButton plusButton = new JButton("+");
+	    toolbar.add(minusButton);
+	    toolbar.add(plusButton);
+	    
+	    getContentPane().add(toolbar,BorderLayout.SOUTH);
 
 		Interaction i = new Interaction(splitPane,this);
 
