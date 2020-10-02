@@ -142,6 +142,7 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 			// TODO (Amad): make it impossible to click minus button if no function is selected in the listScrollPane.
 			if (m_grapher.m_selectedFunction != null) {
 				m_grapher.functions.remove(m_grapher.m_selectedFunction);
+				m_grapher.m_selectedFunction = null;
 			    uiUpdateNeeded = true;
 			}
 		} else if (e.getActionCommand() == "+") {
@@ -154,8 +155,15 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 
 			// If a string was returned, say so.
 			if ((s != null) && (s.length() > 0)) {
-				m_grapher.add(s);
-			    uiUpdateNeeded = true;
+				try {
+					m_grapher.add(s);
+					uiUpdateNeeded = true;
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(m_frame,
+						    "Unknown expression. Please try again.",
+						    "Inane error",
+						    JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 		
