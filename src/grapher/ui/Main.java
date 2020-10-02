@@ -8,6 +8,7 @@ import java.awt.event.ComponentListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
@@ -51,6 +52,8 @@ public class Main extends JFrame {
 	    toolbar.add(minusButton);
 	    toolbar.add(plusButton);
 	    
+	    //JOptionPane jOptionPane = new JOptionPane();
+	    
 	    getContentPane().add(toolbar,BorderLayout.SOUTH);
 
 		Interaction i = new Interaction(splitPane,this);
@@ -60,6 +63,9 @@ public class Main extends JFrame {
 		grapher.addMouseMotionListener(i);
 		grapher.addMouseWheelListener(i);
 		listScrollPane.addListSelectionListener(i);
+		minusButton.addActionListener(i);
+		plusButton.addActionListener(i);
+		
 				
 		add(splitPane);
 		pack();

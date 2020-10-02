@@ -16,13 +16,14 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import grapher.fc.Function;
 
-public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener, ListSelectionListener {
+public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener, ListSelectionListener, ActionListener {
 
 	JSplitPane m_splitPane;
 	Grapher m_grapher;
@@ -131,6 +132,38 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		Function selectedFunction = m_listScrollPane.getSelectedValue();
 		m_grapher.m_selectedFunction = selectedFunction;
 		m_grapher.repaint(); // AMAD: Should a repaint be allowed to get called from there?
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		boolean uiUpdateNeeded = false; // State boolean to limit useless but costly UI updates.
+		
+		if (e.getActionCommand() == "-") {
+			// TODO (Amad): make it impossible to click minus button if no function is selected in the listScrollPane.
+			if (m_grapher.m_selectedFunction != null) {
+				m_grapher.functions.remove(m_grapher.m_selectedFunction);
+			    uiUpdateNeeded = true;
+			}
+		} else if (e.getActionCommand() == "+") {
+			String s = (String) JOptionPane.showInputDialog(
+                    m_frame,
+                    "What mathematical function do you wish to add to the graph?\n "
+                    + "Please type its standard name followed by \"(x)\", all in lowercase.",
+                    "Add a function to graph",
+                    JOptionPane.PLAIN_MESSAGE);
+
+			// If a string was returned, say so.
+			if ((s != null) && (s.length() > 0)) {
+				m_grapher.add(s);
+			    uiUpdateNeeded = true;
+			}
+		}
+		
+		if (uiUpdateNeeded) {
+			// TODO (Amad): update listScrollPane to show updated list of functions. Still a bit buggy: UI is updated on window change only.
+			m_splitPane.revalidate();
+			m_grapher.repaint();
+		}
 	}
 
 }
