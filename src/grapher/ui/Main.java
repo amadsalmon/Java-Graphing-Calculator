@@ -24,6 +24,7 @@ public class Main extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		
+		
 		Grapher grapher = new Grapher();	
 		for(String expression : expressions) {
 			grapher.add(expression);
@@ -31,6 +32,9 @@ public class Main extends JFrame {
 		
 		JList<Function> listScrollPane = new JList<Function>(grapher.functions);
 		
+		
+		
+		/****************  SPLIT PANE  ****************/
 		// Create a split pane with the two panes in it.
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				                           listScrollPane, grapher);
@@ -44,18 +48,20 @@ public class Main extends JFrame {
 		grapher.setMinimumSize(minimumSize2);
 		
 
+		
+		/****************  TOOLBAR CONTAINING +/- BUTTONS  ****************/
 		JToolBar toolbar = new JToolBar();
 	    toolbar.setRollover(true);
 	    toolbar.setFloatable(false);
 	    JButton minusButton = new JButton("-");
 	    JButton plusButton = new JButton("+");
 	    toolbar.add(minusButton);
-	    toolbar.add(plusButton);
-	    
-	    //JOptionPane jOptionPane = new JOptionPane();
-	    
+	    toolbar.add(plusButton);	    
 	    getContentPane().add(toolbar,BorderLayout.SOUTH);
 
+	    
+	    
+	    /****************  ACTION LISTENING  ********/
 		Interaction i = new Interaction(splitPane,this);
 
 		grapher.setInteraction(i);
@@ -66,7 +72,8 @@ public class Main extends JFrame {
 		minusButton.addActionListener(i);
 		plusButton.addActionListener(i);
 		
-				
+			
+		
 		add(splitPane);
 		pack();
 	}
