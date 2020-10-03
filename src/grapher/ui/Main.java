@@ -48,7 +48,7 @@ public class Main extends JFrame {
 	}
 
 	public static void main(String[] argv) {
-		final String[] expressions = new String[] {"cos(x)","sin(x)","tan(x)", "x*x", "atan(x)"};
+		final String[] expressions = new String[] {"cos(x)"};
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() { 
 				new Main("grapher", expressions).setVisible(true); 
