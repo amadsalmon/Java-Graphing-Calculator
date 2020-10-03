@@ -3,11 +3,16 @@ package grapher.ui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Menu;
+import java.awt.MenuBar;
 import java.awt.event.ComponentListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -31,6 +36,24 @@ public class Main extends JFrame {
 		}
 		
 		JList<Function> listScrollPane = new JList<Function>(grapher.functions);
+		
+		
+		/****************  MENU BAR  ****************/
+		JMenuBar menuBar;
+		JMenu menu, submenu;
+		JMenuItem menuItemAdd, menuItemRemove;
+
+		// Create the menu bar.
+		menuBar = new JMenuBar();
+
+		// Build the menu.
+		menu = new JMenu("Expressions");
+		menuBar.add(menu);
+		menuItemAdd = new JMenuItem("Add expression");
+		menu.add(menuItemAdd);
+		menuItemRemove = new JMenuItem("Remove expression");
+		menu.add(menuItemRemove);
+		setJMenuBar(menuBar);
 		
 		
 		
@@ -71,7 +94,8 @@ public class Main extends JFrame {
 		listScrollPane.addListSelectionListener(i);
 		minusButton.addActionListener(i);
 		plusButton.addActionListener(i);
-		
+		menuItemAdd.addActionListener(i);
+		menuItemRemove.addActionListener(i);
 			
 		
 		add(splitPane);

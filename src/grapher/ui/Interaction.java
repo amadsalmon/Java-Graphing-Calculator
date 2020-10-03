@@ -138,14 +138,15 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 	public void actionPerformed(ActionEvent e) {
 		boolean uiUpdateNeeded = false; // State boolean to limit useless but costly UI updates.
 		
-		if (e.getActionCommand() == "-") {
+		String actionCommand = e.getActionCommand();
+		if (actionCommand == "-" || actionCommand == "Remove expression") {
 			// TODO (Amad): make it impossible to click minus button if no function is selected in the listScrollPane.
 			if (m_grapher.m_selectedFunction != null) {
 				m_grapher.functions.remove(m_grapher.m_selectedFunction);
 				m_grapher.m_selectedFunction = null;
 			    uiUpdateNeeded = true;
 			}
-		} else if (e.getActionCommand() == "+") {
+		} else if (actionCommand == "+" || actionCommand == "Add expression") {
 			String s = (String) JOptionPane.showInputDialog(
                     m_frame,
                     "What mathematical function do you wish to add to the graph?\n "
@@ -165,6 +166,8 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 						    JOptionPane.ERROR_MESSAGE);
 				}
 			}
+		} else {
+			System.out.println(e);
 		}
 		
 		if (uiUpdateNeeded) {
