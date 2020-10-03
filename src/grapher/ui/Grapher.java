@@ -24,20 +24,35 @@ public class Grapher extends JPanel {
 	static final int MARGIN = 40;
 	static final int STEP = 5;
 	
-	static final BasicStroke dash = new BasicStroke(1, BasicStroke.CAP_ROUND,
+	static final BasicStroke DEFAULT_STROKE = new BasicStroke(1.0f);
+	static final BasicStroke DASH_STROKE = new BasicStroke(1, BasicStroke.CAP_ROUND,
 	                                                   BasicStroke.JOIN_ROUND,
 	                                                   1.f,
 	                                                   new float[] { 4.f, 4.f },
 	                                                   0.f);
+	
+	static final BasicStroke SELECTED_CURVE_STROKE = new BasicStroke(4.0f);
+	static final BasicStroke DEFAULT_CURVE_STROKE = new BasicStroke(1.3f);
+	
+	static final Color DEFAULT_COLOR = new Color(0, 0, 0);
+	static final Color DEFAULT_CURVE_COLOR = new Color(0, 0, 0);
+	static final Color SELECTED_CURVE_COLOR = new Color(0, 0, 255);
+	static final Color GRID_COLOR = new Color(102, 102, 102);
+	
+	
 	 
 	protected Interaction m_interaction;
 	
-	protected int W = 400;
-	protected int H = 300;
+	protected int W = 1080;
+	protected int H = 720;
 	
 	protected double xmin, xmax;
 	protected double ymin, ymax;
 	
+	protected int m_rectX, m_rectY, m_rectW, m_rectH;
+	protected boolean m_drawR;
+	public Function m_selectedFunction;
+
 	protected Vector<Function> functions;
 	
 	public Grapher() {
@@ -45,6 +60,7 @@ public class Grapher extends JPanel {
 		ymin = -1.5;   ymax = 1.5;
 		
 		functions = new Vector<Function>();
+		m_selectedFunction = null;
 	}
 	
 	public void setInteraction(Interaction i) {
@@ -76,7 +92,8 @@ public class Grapher extends JPanel {
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, W, H);
 		
-		g2.setColor(Color.BLACK);
+		// Stroke color
+		g2.setColor(DEFAULT_CURVE_COLOR);
 
 		// box
 		g2.translate(MARGIN, MARGIN);
@@ -108,30 +125,41 @@ public class Grapher extends JPanel {
 		}
 		
 		for(Function f : functions) {
+			g2.setStroke(DEFAULT_CURVE_STROKE);
+			g2.setColor(DEFAULT_CURVE_COLOR);
 			// y values
 			int Ys[] = new int[N];
 			for(int i = 0; i < N; i++) {
 				Ys[i] = Y(f.y(xs[i]));
 			}
-			
+			if (f==m_selectedFunction) {
+				g2.setStroke(SELECTED_CURVE_STROKE);
+				g2.setColor(SELECTED_CURVE_COLOR);
+			}
 			g2.drawPolyline(Xs, Ys, N);
 		}
+		
+		g2.setStroke(DEFAULT_STROKE);
+		g2.setColor(DEFAULT_COLOR);
 
 		g2.setClip(null);
 
 		// axes
+		g2.setColor(GRID_COLOR);
 		drawXTick(g2, BigDecimal.ZERO);
 		drawYTick(g2, BigDecimal.ZERO);
 		
 		BigDecimal xstep = unit((xmax-xmin)/10);
 		BigDecimal ystep = unit((ymax-ymin)/10);
 		
-		g2.setStroke(dash);
+		g2.setStroke(DASH_STROKE);
+		g2.setColor(GRID_COLOR);
 		for(BigDecimal x = xstep; x.doubleValue() < xmax; x = x.add(xstep))  { drawXTick(g2, x); }
 		for(BigDecimal x = xstep.negate(); x.doubleValue() > xmin; x = x.subtract(xstep)) { drawXTick(g2, x); }
 		for(BigDecimal y = ystep; y.doubleValue() < ymax; y = y.add(ystep))  { drawYTick(g2, y); }
 		for(BigDecimal y = ystep.negate(); y.doubleValue() > ymin; y = y.subtract(ystep)) { drawYTick(g2, y); }
-		
+		g2.setStroke(DEFAULT_STROKE);
+		g2.setColor(DEFAULT_COLOR);
 		m_interaction.draw(g2);
 	}
 	

@@ -6,6 +6,8 @@ package grapher.ui;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -13,18 +15,28 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JSplitPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener {
+import grapher.fc.Function;
 
+public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener, ListSelectionListener {
+
+	JSplitPane m_splitPane;
 	Grapher m_grapher;
+	JList<Function> m_listScrollPane;
 	JFrame m_frame;
 	int m_x, m_y;
 	int m_button;
 	int m_state;
 	Point m_start, m_end;
 
-	public Interaction(Grapher grapher, JFrame frame) {
-		m_grapher = grapher;
+	public Interaction(JSplitPane splitPane, JFrame frame) {
+		m_splitPane = splitPane;
+		m_grapher = (Grapher) splitPane.getRightComponent();
+		m_listScrollPane = (JList<Function>) splitPane.getLeftComponent();
 		m_frame = frame;
 		m_button = MouseEvent.NOBUTTON;
 		m_start = new Point(0,0);
@@ -112,6 +124,13 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 			}
 		}
 		m_grapher.repaint();
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		Function selectedFunction = m_listScrollPane.getSelectedValue();
+		m_grapher.m_selectedFunction = selectedFunction;
+		m_grapher.repaint(); // AMAD: Should a repaint be allowed to get called from there?
 	}
 
 }
