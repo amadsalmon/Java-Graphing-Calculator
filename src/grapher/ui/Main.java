@@ -30,14 +30,6 @@ public class Main extends JFrame {
 		
 		
 		
-		Grapher grapher = new Grapher();	
-		for(String expression : expressions) {
-			grapher.add(expression);
-		}
-		
-		JList<Function> listScrollPane = new JList<Function>(grapher.functions);
-		
-		
 		/****************  MENU BAR  ****************/
 		JMenuBar menuBar;
 		JMenu menu, submenu;
@@ -53,26 +45,27 @@ public class Main extends JFrame {
 		menu.add(menuItemAdd);
 		menuItemRemove = new JMenuItem("Remove selected expression");
 		menu.add(menuItemRemove);
-		setJMenuBar(menuBar);
+		setJMenuBar(menuBar);		
 		
 		
 		
-		/****************  SPLIT PANE  ****************/
-		// Create a split pane with the two panes in it.
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				                           listScrollPane, grapher);
-		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(150);
-
-		// Provide minimum sizes for the two components in the split pane
-		Dimension minimumSize1 = new Dimension(100, 50);
-		listScrollPane.setMinimumSize(minimumSize1);
-		Dimension minimumSize2 = new Dimension(100, 50);
-		grapher.setMinimumSize(minimumSize2);
 		
-
+		/****************  RIGHT PANE  ****************/
+		Grapher grapher = new Grapher();	
+		for(String expression : expressions) {
+			grapher.add(expression);
+		}
 		
-		/****************  TOOLBAR CONTAINING +/- BUTTONS  ****************/
+		
+		
+		
+		
+		/****************  LEFT PANE  ****************/
+		/***  Scroll list view  ***/
+		JList<Function> scrollListView = new JList<Function>(grapher.functions);
+		
+		
+		/***  TOOLBAR CONTAINING +/- BUTTONS  ***/
 		JToolBar toolbar = new JToolBar();
 	    toolbar.setRollover(true);
 	    toolbar.setFloatable(false);
@@ -81,17 +74,43 @@ public class Main extends JFrame {
 	    toolbar.add(minusButton);
 	    toolbar.add(plusButton);	    
 	    getContentPane().add(toolbar,BorderLayout.SOUTH);
+	    
+	    
+	    /***  FULL LEFT PANE  ***/
+	    JPanel leftPanel = new JPanel(new BorderLayout());
+		leftPanel.add(scrollListView, BorderLayout.CENTER);
+		leftPanel.add(toolbar, BorderLayout.SOUTH);
+		
+		
+		
+		
+		
+		/****************  SPLIT PANE  ****************/
+		
+		// Create a split pane with the two panes in it.
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+				leftPanel, grapher);
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(150);
 
+		// Provide minimum sizes for the two components in the split pane
+		Dimension minimumSize1 = new Dimension(100, 50);
+		scrollListView.setMinimumSize(minimumSize1);
+		Dimension minimumSize2 = new Dimension(100, 50);
+		grapher.setMinimumSize(minimumSize2);
 	    
 	    
-	    /****************  ACTION LISTENING  ********/
-		Interaction i = new Interaction(splitPane,this);
+	    
+		
+		
+		/****************  ACTION LISTENING  ********/
+		Interaction i = new Interaction(scrollListView, grapher, this);
 
 		grapher.setInteraction(i);
 		grapher.addMouseListener(i);
 		grapher.addMouseMotionListener(i);
 		grapher.addMouseWheelListener(i);
-		listScrollPane.addListSelectionListener(i);
+		scrollListView.addListSelectionListener(i);
 		minusButton.addActionListener(i);
 		plusButton.addActionListener(i);
 		menuItemAdd.addActionListener(i);

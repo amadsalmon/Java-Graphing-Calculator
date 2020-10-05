@@ -25,7 +25,6 @@ import grapher.fc.Function;
 
 public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener, ListSelectionListener, ActionListener {
 
-	JSplitPane m_splitPane;
 	Grapher m_grapher;
 	JList<Function> m_listScrollPane;
 	JFrame m_frame;
@@ -34,10 +33,9 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 	int m_state;
 	Point m_start, m_end;
 
-	public Interaction(JSplitPane splitPane, JFrame frame) {
-		m_splitPane = splitPane;
-		m_grapher = (Grapher) splitPane.getRightComponent();
-		m_listScrollPane = (JList<Function>) splitPane.getLeftComponent();
+	public Interaction(JList<Function> listScrollPane, Grapher grapher, JFrame frame) {
+		m_grapher = grapher;
+		m_listScrollPane = listScrollPane;
 		m_frame = frame;
 		m_button = MouseEvent.NOBUTTON;
 		m_start = new Point(0,0);
