@@ -142,7 +142,7 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		if (actionCommand == "-" || actionCommand == "Remove expression") {
 			// TODO (Amad): make it impossible to click minus button if no function is selected in the listScrollPane.
 			if (m_grapher.m_selectedFunction != null) {
-				m_grapher.functions.remove(m_grapher.m_selectedFunction);
+				m_grapher.functions.removeElement(m_grapher.m_selectedFunction);
 				m_grapher.m_selectedFunction = null;
 			    uiUpdateNeeded = true;
 			}
@@ -172,7 +172,6 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		
 		if (uiUpdateNeeded) {
 			// TODO (Amad): update listScrollPane to show updated list of functions. Still a bit buggy: UI is updated on window change only.
-			m_splitPane.revalidate();
 			m_grapher.repaint();
 		}
 	}

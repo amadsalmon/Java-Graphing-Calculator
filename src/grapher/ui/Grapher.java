@@ -11,9 +11,8 @@ import java.awt.RenderingHints;
 
 import java.awt.Point;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
-
-import java.util.Vector;
 
 import static java.lang.Math.*;
 
@@ -53,13 +52,13 @@ public class Grapher extends JPanel {
 	protected boolean m_drawR;
 	public Function m_selectedFunction;
 
-	protected Vector<Function> functions;
+	protected DefaultListModel<Function> functions;
 	
 	public Grapher() {
 		xmin = -PI/2.; xmax = 3*PI/2;
 		ymin = -1.5;   ymax = 1.5;
 		
-		functions = new Vector<Function>();
+		functions = new DefaultListModel<Function>();
 		m_selectedFunction = null;
 	}
 	
@@ -72,7 +71,7 @@ public class Grapher extends JPanel {
 	}
 	
 	public void add(Function function) {
-		functions.add(function);
+		functions.addElement(function);
 		repaint();
 	}
 	
@@ -124,15 +123,15 @@ public class Grapher extends JPanel {
 			Xs[i] = X(x);
 		}
 		
-		for(Function f : functions) {
+		for (int i = 0; i < functions.getSize(); i++) {
 			g2.setStroke(DEFAULT_CURVE_STROKE);
 			g2.setColor(DEFAULT_CURVE_COLOR);
 			// y values
 			int Ys[] = new int[N];
-			for(int i = 0; i < N; i++) {
-				Ys[i] = Y(f.y(xs[i]));
+			for(int j = 0; j < N; j++) {
+				Ys[j] = Y(functions.get(i).y(xs[j]));
 			}
-			if (f==m_selectedFunction) {
+			if (functions.get(i)==m_selectedFunction) {
 				g2.setStroke(SELECTED_CURVE_STROKE);
 				g2.setColor(SELECTED_CURVE_COLOR);
 			}
