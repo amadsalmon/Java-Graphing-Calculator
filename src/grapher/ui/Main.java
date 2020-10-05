@@ -51,7 +51,7 @@ public class Main extends JFrame {
 		menuBar.add(menu);
 		menuItemAdd = new JMenuItem("Add expression");
 		menu.add(menuItemAdd);
-		menuItemRemove = new JMenuItem("Remove expression");
+		menuItemRemove = new JMenuItem("Remove selected expression");
 		menu.add(menuItemRemove);
 		setJMenuBar(menuBar);
 		
