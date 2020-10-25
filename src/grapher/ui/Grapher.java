@@ -1,25 +1,31 @@
 package grapher.ui;
 
-import java.math.BigDecimal;
+import static java.lang.Math.PI;
+import static java.lang.Math.exp;
+import static java.lang.Math.floor;
+import static java.lang.Math.log10;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.pow;
+import static java.lang.Math.round;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Color;
-import java.awt.BasicStroke;
-import java.awt.RenderingHints;
-
 import java.awt.Point;
+import java.awt.RenderingHints;
+import java.math.BigDecimal;
+import java.util.Vector;
 
 import javax.swing.JPanel;
 
-import java.util.Vector;
-
-import static java.lang.Math.*;
-
-import grapher.fc.*;
+import grapher.fc.Function;
+import grapher.fc.FunctionFactory;
 
 
+@SuppressWarnings("serial")
 public class Grapher extends JPanel {
 	static final int MARGIN = 40;
 	static final int STEP = 5;
@@ -36,16 +42,20 @@ public class Grapher extends JPanel {
 	protected double xmin, xmax;
 	protected double ymin, ymax;
 	
-	protected int m_rectX, m_rectY, m_rectW, m_rectH;
-	protected boolean m_drawR;
 
 	protected Vector<Function> functions;
+	
+	protected Interaction iter;
 	
 	public Grapher() {
 		xmin = -PI/2.; xmax = 3*PI/2;
 		ymin = -1.5;   ymax = 1.5;
 		
 		functions = new Vector<Function>();
+	}
+	
+	public void setInteraction(Interaction i) {
+		iter = i;
 	}
 	
 	public void add(String expression) {
@@ -129,10 +139,8 @@ public class Grapher extends JPanel {
 		for(BigDecimal y = ystep; y.doubleValue() < ymax; y = y.add(ystep))  { drawYTick(g2, y); }
 		for(BigDecimal y = ystep.negate(); y.doubleValue() > ymin; y = y.subtract(ystep)) { drawYTick(g2, y); }
 	
-		if(m_drawR) {
-			g2.drawRect(m_rectX, m_rectY, m_rectW, m_rectH);
-			m_drawR = false;
-		}
+			
+		iter.drawR(g2);
 	}
 	
 	protected double dx(int dX) { return  (double)((xmax-xmin)*dX/W); }
@@ -205,14 +213,5 @@ public class Grapher extends JPanel {
 		ymin = min(y0, y1); ymax = max(y0, y1);
 		repaint();
 	}
-	
-	protected void drawRectangle(Point p0, Point p1) {
-		m_rectX = p0.x;
-		m_rectY = p0.y;
-		m_rectW = p1.x - p0.x;
-		m_rectH  = p1.y - p0.y;
-		m_drawR = true;
-		repaint();
-	}
-	
+		
 }

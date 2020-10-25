@@ -4,7 +4,7 @@
 package grapher.ui;
 
 import java.awt.Cursor;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -21,6 +21,7 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 	int m_x, m_y;
 	int m_button;
 	int m_state;
+	boolean m_drawR;
 	Point m_start, m_end;
 
 	public Interaction(Grapher grapher, JFrame frame) {
@@ -29,12 +30,13 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_button = MouseEvent.NOBUTTON;
 		m_start = new Point(0,0);
 		m_end = new Point(0,0);
+		m_drawR = false;
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		Point p = new Point(e.getX(), e.getY());
-		m_grapher.zoom(p, e.getWheelRotation()); // Effectue zoom relatif au taux de scroll et centré sur p le curseur de la souris. 
+		m_grapher.zoom(p, e.getWheelRotation()); 
 	}
 
 	@Override
@@ -91,7 +93,7 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		
 		if (m_button == MouseEvent.BUTTON3) {
 			m_end.setLocation(m_x, m_y);
-			m_grapher.drawRectangle(m_start, m_end);
+			m_drawR = true;
 		}
 		
 		m_state = MouseEvent.MOUSE_DRAGGED;
@@ -103,4 +105,25 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_y = e.getY();
 	}
 
+	public void drawR(Graphics2D g) {
+		
+		if(m_drawR) {
+			Point p0 = m_start, p1 = m_end;
+			
+			if(p1.x - p0.x >= 0 && p1.y - p0.y >= 0)
+					g.drawRect(p0.x, p0.y, p1.x - p0.x, p1.y - p0.y);
+			
+				else if (p1.x - p0.x < 0 && p1.y - p0.y >= 0) 
+					g.drawRect(p1.x, p0.y, p0.x - p1.x, p1.y - p0.y);
+			
+			    else if (p1.x - p0.x >= 0 && p1.y - p0.y < 0) 
+					g.drawRect(p0.x, p1.y, p1.x - p0.x, p0.y - p1.y);
+			
+				else 
+					g.drawRect(p1.x, p1.y, p0.x - p1.x, p0.y - p1.y);
+		}	
+		
+		m_drawR = false;
+		m_grapher.repaint();
+	}
 }
