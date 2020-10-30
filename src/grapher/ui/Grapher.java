@@ -1,23 +1,29 @@
 package grapher.ui;
 
-import java.math.BigDecimal;
-import java.util.Vector;
+import static java.lang.Math.PI;
+import static java.lang.Math.exp;
+import static java.lang.Math.floor;
+import static java.lang.Math.log10;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.pow;
+import static java.lang.Math.round;
+
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Color;
-import java.awt.BasicStroke;
-import java.awt.RenderingHints;
-
 import java.awt.Point;
+import java.awt.RenderingHints;
+import java.math.BigDecimal;
+import java.util.Vector;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
-import static java.lang.Math.*;
-
-import grapher.fc.*;
+import grapher.fc.Function;
+import grapher.fc.FunctionFactory;
 
 
 public class Grapher extends JPanel {

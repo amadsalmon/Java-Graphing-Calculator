@@ -1,5 +1,11 @@
 package grapher.fc;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.security.SecureClassLoader;
+
 // runtime creation and instanciation of class implementing Function interface
 // shamelessly stolen from:
 // https://javajazzle.wordpress.com/2011/06/29/dynamic-in-memory-compilation-using-javax-tools/
@@ -10,23 +16,14 @@ package grapher.fc;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import java.security.SecureClassLoader;
-
-import java.net.URI;
-
 import javax.tools.FileObject;
+import javax.tools.ForwardingJavaFileManager;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 import javax.tools.SimpleJavaFileObject;
-import javax.tools.JavaFileManager;
-import javax.tools.ForwardingJavaFileManager;
 import javax.tools.StandardJavaFileManager;
-import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 

@@ -3,7 +3,6 @@
  */
 package grapher.ui;
 
-import java.awt.Button;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -15,12 +14,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
