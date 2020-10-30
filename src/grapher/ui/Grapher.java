@@ -1,7 +1,7 @@
 package grapher.ui;
 
 import java.math.BigDecimal;
-
+import java.util.Vector;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,6 +13,7 @@ import java.awt.Point;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 import static java.lang.Math.*;
 
@@ -50,15 +51,25 @@ public class Grapher extends JPanel {
 	
 	protected int m_rectX, m_rectY, m_rectW, m_rectH;
 	protected boolean m_drawR;
-	public Function m_selectedFunction;
 
-	protected DefaultListModel<Function> functions;
+	public Function m_selectedFunction; // TODO (Amad): make it a list of selected functions as it is possible to select mutliple sidelistitems
+
+	Vector<Vector<Object>> data; //used for data from database
+	Vector<String> header; //used to store data header
+	DefaultTableModel model;
+	
 	
 	public Grapher() {
 		xmin = -PI/2.; xmax = 3*PI/2;
 		ymin = -1.5;   ymax = 1.5;
 		
-		functions = new DefaultListModel<Function>();
+		header = new Vector<String>();
+	    header.add("Expression"); 
+	    header.add("Color");
+		data = new Vector<Vector<Object>>();
+		
+		model = new DefaultTableModel(data, header);
+		
 		m_selectedFunction = null;
 	}
 	
@@ -70,8 +81,12 @@ public class Grapher extends JPanel {
 		add(FunctionFactory.createFunction(expression));
 	}
 	
-	public void add(Function function) {
-		functions.addElement(function);
+	public void add(Function function) {		
+		Vector<Object> singleVector = new Vector<Object>();
+		singleVector.add(function);
+		singleVector.add(DEFAULT_CURVE_COLOR);
+		data.addElement(singleVector);;
+		
 		repaint();
 	}
 	
@@ -123,15 +138,17 @@ public class Grapher extends JPanel {
 			Xs[i] = X(x);
 		}
 		
-		for (int i = 0; i < functions.getSize(); i++) {
-			g2.setStroke(DEFAULT_CURVE_STROKE);
-			g2.setColor(DEFAULT_CURVE_COLOR);
+		for (int i = 0; i < model.getRowCount(); i++) {
+			Function functionToGraph = (Function) model.getValueAt(i, 0);
+			
+			g2.setStroke(DEFAULT_STROKE);
+			
 			// y values
 			int Ys[] = new int[N];
 			for(int j = 0; j < N; j++) {
-				Ys[j] = Y(functions.get(i).y(xs[j]));
+				Ys[j] = Y(functionToGraph.y(xs[j]));
 			}
-			if (functions.get(i)==m_selectedFunction) {
+			if (functionToGraph == m_selectedFunction) {
 				g2.setStroke(SELECTED_CURVE_STROKE);
 			}
 			g2.drawPolyline(Xs, Ys, N);

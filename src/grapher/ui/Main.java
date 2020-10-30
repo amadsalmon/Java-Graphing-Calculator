@@ -1,11 +1,13 @@
 package grapher.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.event.ComponentListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,13 +17,17 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import grapher.fc.Function;
-
 
 public class Main extends JFrame {
 	Main(String title, String[] expressions) {
@@ -62,8 +68,12 @@ public class Main extends JFrame {
 		
 		/****************  LEFT PANE  ****************/
 		/***  Scroll list view  ***/
-		JList<Function> scrollListView = new JList<Function>(grapher.functions);
-		
+	    JTable table = new JTable(grapher.model);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	    
+		//Create the scroll pane and add the table to it.
+		JScrollPane scrollListView = new JScrollPane(table);
+		ListSelectionModel listSelectionModel = table.getSelectionModel();	
 		
 		/***  TOOLBAR CONTAINING +/- BUTTONS  ***/
 		JToolBar toolbar = new JToolBar();
@@ -104,18 +114,17 @@ public class Main extends JFrame {
 		
 		
 		/****************  ACTION LISTENING  ********/
-		Interaction i = new Interaction(scrollListView, grapher, this);
+		Interaction i = new Interaction(scrollListView, listSelectionModel, grapher, this);
 
 		grapher.setInteraction(i);
 		grapher.addMouseListener(i);
 		grapher.addMouseMotionListener(i);
 		grapher.addMouseWheelListener(i);
-		scrollListView.addListSelectionListener(i);
+		listSelectionModel.addListSelectionListener(i);
 		minusButton.addActionListener(i);
 		plusButton.addActionListener(i);
 		menuItemAdd.addActionListener(i);
 		menuItemRemove.addActionListener(i);
-			
 		
 		add(splitPane);
 		pack();

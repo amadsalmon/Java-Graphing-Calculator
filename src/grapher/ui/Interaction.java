@@ -3,6 +3,7 @@
  */
 package grapher.ui;
 
+import java.awt.Button;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -14,10 +15,13 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -26,16 +30,18 @@ import grapher.fc.Function;
 public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener, ListSelectionListener, ActionListener {
 
 	Grapher m_grapher;
-	JList<Function> m_listScrollPane;
+	JScrollPane m_listScrollPane;
+	ListSelectionModel m_listSelectionModel;
 	JFrame m_frame;
 	int m_x, m_y;
 	int m_button;
 	int m_state;
 	Point m_start, m_end;
 
-	public Interaction(JList<Function> listScrollPane, Grapher grapher, JFrame frame) {
+	public Interaction(JScrollPane scrollListView, ListSelectionModel listSelectionModel, Grapher grapher, JFrame frame) {
 		m_grapher = grapher;
-		m_listScrollPane = listScrollPane;
+		m_listScrollPane = scrollListView;
+		m_listSelectionModel = listSelectionModel;
 		m_frame = frame;
 		m_button = MouseEvent.NOBUTTON;
 		m_start = new Point(0,0);
@@ -127,7 +133,8 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		Function selectedFunction = m_listScrollPane.getSelectedValue();
+		int selectedIndex = m_listSelectionModel.getSelectedIndices()[0];
+		Function selectedFunction = (Function) m_grapher.model.getValueAt(selectedIndex, 0);
 		m_grapher.m_selectedFunction = selectedFunction;
 		m_grapher.repaint(); // AMAD: Should a repaint be allowed to get called from there?
 	}
@@ -140,8 +147,10 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		if (actionCommand == "-" || actionCommand == "Remove expression") {
 			// TODO (Amad): make it impossible to click the minus button if no function is selected in the listScrollPane.
 			if (m_grapher.m_selectedFunction != null) {
-				m_grapher.functions.removeElement(m_grapher.m_selectedFunction);
+				int indexOfSelectedFunction = m_grapher.model.getDataVector().indexOf(m_grapher.m_selectedFunction);
+				m_grapher.model.removeRow(indexOfSelectedFunction);
 				m_grapher.m_selectedFunction = null;
+				
 			    uiUpdateNeeded = true;
 			}
 		} else if (actionCommand == "+" || actionCommand == "Add expression") {
@@ -165,10 +174,10 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 				}
 			}
 		} else {
-			System.out.println(e);
+			System.out.println("Unhandled ActionEvent:"+'\n'+e);
 		}
 		
-		if (uiUpdateNeeded) {
+		if (uiUpdateNeeded) {			
 			m_grapher.repaint();
 		}
 	}
