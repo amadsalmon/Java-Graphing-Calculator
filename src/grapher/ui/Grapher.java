@@ -133,7 +133,6 @@ public class Grapher extends JPanel {
 			}
 			if (functions.get(i)==m_selectedFunction) {
 				g2.setStroke(SELECTED_CURVE_STROKE);
-				g2.setColor(SELECTED_CURVE_COLOR);
 			}
 			g2.drawPolyline(Xs, Ys, N);
 		}
