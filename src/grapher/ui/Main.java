@@ -25,6 +25,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import grapher.fc.Function;
@@ -76,7 +77,9 @@ public class Main extends JFrame {
 		JScrollPane scrollListView = new JScrollPane(table);
 		ListSelectionModel listSelectionModel = table.getSelectionModel();	
 		//Set up renderer and editor for the Color column.
-		table.getColumnModel().getColumn(1).setCellRenderer(new ColorRenderer(true));
+		TableColumn colorColumn = table.getColumnModel().getColumn(1);
+		colorColumn.setCellRenderer(new ColorRenderer(true));
+		colorColumn.setCellEditor(new ColorEditor());
 		
 		/***  TOOLBAR CONTAINING +/- BUTTONS  ***/
 		JToolBar toolbar = new JToolBar();
