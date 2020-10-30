@@ -43,7 +43,9 @@ import java.awt.Component;
 
 public class ColorRenderer extends JLabel
                            implements TableCellRenderer {
-    Border unselectedBorder = null;
+	private static final long serialVersionUID = -8849096980874496552L;
+	
+	Border unselectedBorder = null;
     Border selectedBorder = null;
     boolean isBordered = true;
 
@@ -56,7 +58,7 @@ public class ColorRenderer extends JLabel
                             JTable table, Object color,
                             boolean isSelected, boolean hasFocus,
                             int row, int column) {
-        Color newColor = (Color)color;
+        Color newColor = (Color) color;
         setBackground(newColor);
         if (isBordered) {
             if (isSelected) {
@@ -73,10 +75,7 @@ public class ColorRenderer extends JLabel
                 setBorder(unselectedBorder);
             }
         }
-        
-        setToolTipText("RGB value: " + newColor.getRed() + ", "
-                                     + newColor.getGreen() + ", "
-                                     + newColor.getBlue());
+        setToolTipText("RGB value: " + newColor.getRed() + ", " + newColor.getGreen() + ", " + newColor.getBlue());
         return this;
     }
 }
