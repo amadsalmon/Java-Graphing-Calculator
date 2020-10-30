@@ -53,6 +53,7 @@ public class Main extends JFrame {
 		menu.add(menuItemRemove);
 		setJMenuBar(menuBar);		
 		
+		// TODO Amad: Add 'Options' tab for the following setting: "Cell selection: single, multiple, etc".
 		
 		
 		
@@ -83,9 +84,8 @@ public class Main extends JFrame {
 	    JButton plusButton = new JButton("+");
 	    toolbar.add(minusButton);
 	    toolbar.add(plusButton);	    
-	    getContentPane().add(toolbar,BorderLayout.SOUTH);
-	    
-	    
+	    // TODO (Amad): minusButton.setEnabled(false); // make '-' button unclickable at first, as there isn't any selected function by default that can be deleted
+
 	    /***  FULL LEFT PANE  ***/
 	    JPanel leftPanel = new JPanel(new BorderLayout());
 		leftPanel.add(scrollListView, BorderLayout.CENTER);
