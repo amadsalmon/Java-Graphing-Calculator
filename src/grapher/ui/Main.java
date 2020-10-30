@@ -75,6 +75,8 @@ public class Main extends JFrame {
 		//Create the scroll pane and add the table to it.
 		JScrollPane scrollListView = new JScrollPane(table);
 		ListSelectionModel listSelectionModel = table.getSelectionModel();	
+		//Set up renderer and editor for the Color column.
+		table.getColumnModel().getColumn(1).setCellRenderer(new ColorRenderer(true));
 		
 		/***  TOOLBAR CONTAINING +/- BUTTONS  ***/
 		JToolBar toolbar = new JToolBar();
@@ -88,6 +90,7 @@ public class Main extends JFrame {
 
 	    /***  FULL LEFT PANE  ***/
 	    JPanel leftPanel = new JPanel(new BorderLayout());
+	    leftPanel.setOpaque(true);
 		leftPanel.add(scrollListView, BorderLayout.CENTER);
 		leftPanel.add(toolbar, BorderLayout.SOUTH);
 		
@@ -108,7 +111,7 @@ public class Main extends JFrame {
 		scrollListView.setMinimumSize(minimumSize1);
 		Dimension minimumSize2 = new Dimension(100, 50);
 		grapher.setMinimumSize(minimumSize2);
-	    
+		splitPane.setOpaque(true);	
 	    
 	    
 		

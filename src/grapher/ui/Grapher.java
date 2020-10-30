@@ -140,7 +140,9 @@ public class Grapher extends JPanel {
 		
 		for (int i = 0; i < model.getRowCount(); i++) {
 			Function functionToGraph = (Function) model.getValueAt(i, 0);
+			Color colorToGraph = (Color) model.getValueAt(i, 1);
 			
+			g2.setColor(colorToGraph);
 			g2.setStroke(DEFAULT_STROKE);
 			
 			// y values
