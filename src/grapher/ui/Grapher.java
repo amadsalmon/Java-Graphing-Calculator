@@ -16,7 +16,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JPanel;
@@ -35,7 +38,9 @@ public class Grapher extends JPanel {
 	                                                   1.f,
 	                                                   new float[] { 4.f, 4.f },
 	                                                   0.f);
-	                                                   
+	
+	static final BasicStroke bold = new BasicStroke(2);
+	
 	protected int W = 400;
 	protected int H = 300;
 	
@@ -44,6 +49,7 @@ public class Grapher extends JPanel {
 	
 
 	protected Vector<Function> functions;
+	protected List<String> selectedFunctions;
 	
 	protected Interaction iter;
 	
@@ -67,6 +73,16 @@ public class Grapher extends JPanel {
 		repaint();
 	}
 	
+	public void remove(String expression) {
+		for(int i = 0; i < functions.size(); i++) {
+			if (functions.elementAt(i).toString().equals(expression)) {
+				functions.remove(i);
+				return;
+			}
+				
+		}
+	}
+	
 	public Dimension getPreferredSize() { return new Dimension(W, H); }
 	
 	protected void paintComponent(Graphics g) {
@@ -79,6 +95,8 @@ public class Grapher extends JPanel {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
 		                    RenderingHints.VALUE_ANTIALIAS_ON);
 
+		Stroke stroke = g2.getStroke();
+		
 		// background
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, W, H);
@@ -114,6 +132,7 @@ public class Grapher extends JPanel {
 			Xs[i] = X(x);
 		}
 		
+	
 		for(Function f : functions) {
 			// y values
 			int Ys[] = new int[N];
@@ -121,9 +140,14 @@ public class Grapher extends JPanel {
 				Ys[i] = Y(f.y(xs[i]));
 			}
 			
+			if(selectedFunctions != null && selectedFunctions.contains(f.toString()))
+				g2.setStroke(bold);
 			g2.drawPolyline(Xs, Ys, N);
+			g2.setStroke(stroke);
 		}
 
+		g2.setStroke(stroke);
+		
 		g2.setClip(null);
 
 		// axes
@@ -138,9 +162,8 @@ public class Grapher extends JPanel {
 		for(BigDecimal x = xstep.negate(); x.doubleValue() > xmin; x = x.subtract(xstep)) { drawXTick(g2, x); }
 		for(BigDecimal y = ystep; y.doubleValue() < ymax; y = y.add(ystep))  { drawYTick(g2, y); }
 		for(BigDecimal y = ystep.negate(); y.doubleValue() > ymin; y = y.subtract(ystep)) { drawYTick(g2, y); }
-	
-			
-		iter.drawR(g2);
+		
+		iter.paint(g2, W, H);
 	}
 	
 	protected double dx(int dX) { return  (double)((xmax-xmin)*dX/W); }
@@ -212,6 +235,10 @@ public class Grapher extends JPanel {
 		xmin = min(x0, x1); xmax = max(x0, x1);
 		ymin = min(y0, y1); ymax = max(y0, y1);
 		repaint();
+	}
+	
+	protected void setSelected(List<String> selected) {
+		selectedFunctions = selected;
 	}
 		
 }

@@ -6,15 +6,31 @@ package grapher.ui;
 import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener {
+
+public class Interaction implements MouseListener,
+									MouseWheelListener, MouseMotionListener, 
+									ListSelectionListener, ActionListener {
+
+	final static int MARGIN = 40;
 
 	Grapher m_grapher;
 	JFrame m_frame;
@@ -23,6 +39,8 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 	int m_state;
 	boolean m_drawR;
 	Point m_start, m_end;
+	
+	JList<String> m_functions;
 
 	public Interaction(Grapher grapher, JFrame frame) {
 		m_grapher = grapher;
@@ -33,6 +51,10 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_drawR = false;
 	}
 
+	public void addFunctions(JList<String> f) {
+		m_functions = f;
+	}
+	
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		Point p = new Point(e.getX(), e.getY());
@@ -54,9 +76,10 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 			m_frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			m_button = MouseEvent.BUTTON1;
 		} else if (e.getButton() == MouseEvent.BUTTON3) {
-			m_frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-			m_button = MouseEvent.BUTTON3;
 			m_start = new Point(e.getX(), e.getY());
+			if(m_start.x >= MARGIN && m_start.y >= MARGIN)
+				m_frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+			m_button = MouseEvent.BUTTON3;
 		}
 	}
 
@@ -65,10 +88,12 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		if (m_button == MouseEvent.BUTTON3 && m_state == MouseEvent.MOUSE_DRAGGED) {
 			m_end = new Point(e.getX(), e.getY());
-			m_grapher.zoom(m_start, m_end);
+			if (m_start.x >= MARGIN && m_start.y >= MARGIN)
+				m_grapher.zoom(m_start, m_end);
 		}
 		m_button = MouseEvent.NOBUTTON;
 		m_state = MouseEvent.NOBUTTON;
+		m_drawR = false;
 	}
 
 	@Override
@@ -93,7 +118,8 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		
 		if (m_button == MouseEvent.BUTTON3) {
 			m_end.setLocation(m_x, m_y);
-			m_drawR = true;
+			if(m_start.x >= MARGIN && m_start.y >= MARGIN)
+				m_drawR = true;
 		}
 		
 		m_state = MouseEvent.MOUSE_DRAGGED;
@@ -105,25 +131,103 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_y = e.getY();
 	}
 
-	public void drawR(Graphics2D g) {
+	public void paint(Graphics2D g, int W, int H) {
+		if(m_drawR)
+			drawR(g, W, H);
 		
-		if(m_drawR) {
-			Point p0 = m_start, p1 = m_end;
-			
-			if(p1.x - p0.x >= 0 && p1.y - p0.y >= 0)
-					g.drawRect(p0.x, p0.y, p1.x - p0.x, p1.y - p0.y);
-			
-				else if (p1.x - p0.x < 0 && p1.y - p0.y >= 0) 
-					g.drawRect(p1.x, p0.y, p0.x - p1.x, p1.y - p0.y);
-			
-			    else if (p1.x - p0.x >= 0 && p1.y - p0.y < 0) 
-					g.drawRect(p0.x, p1.y, p1.x - p0.x, p0.y - p1.y);
-			
-				else 
-					g.drawRect(p1.x, p1.y, p0.x - p1.x, p0.y - p1.y);
-		}	
-		
-		m_drawR = false;
 		m_grapher.repaint();
 	}
+	
+	public void clip(Point p, int W, int H) {
+		
+		if(p.x > W + MARGIN)
+			p.x = W + MARGIN;
+		
+		if (p.x < MARGIN)
+			p.x = MARGIN;
+		
+		if(p.y > H + MARGIN)
+			p.y = H + MARGIN;
+		
+		if (p.y < MARGIN)
+			p.y = MARGIN;
+	}
+	
+	public void drawR(Graphics2D g, int W, int H) {
+		
+		Point p0 = m_start, p1 = m_end;
+
+		clip(p1, W, H);
+		
+		int width = p1.x - p0.x, height = p1.y - p0.y;
+		
+		
+		if (width >= 0 && height >= 0)
+				g.drawRect(p0.x, p0.y, width, height);
+		
+			else if (width < 0 && height >= 0) 
+				g.drawRect(p1.x, p0.y, -width, height);
+		
+		    else if (width >= 0 && height < 0) 
+				g.drawRect(p0.x, p1.y, width, -height);
+		
+			else 
+				g.drawRect(p1.x, p1.y, -width, -height);
+	}
+
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if(!e.getValueIsAdjusting()) {
+			m_grapher.setSelected(m_functions.getSelectedValuesList());
+		}
+			
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String actionCommand = e.getActionCommand();
+		
+		if (actionCommand.equals(new String("+")) || actionCommand.equals(new String ("Add..."))){	
+			 String s = JOptionPane.showInputDialog("Nouvelle expression de paramètre (x)");
+			
+			 if(s != null & s.length() > 0) {
+				 try {
+					 m_grapher.add(s);
+					 ListModel<String> old_functions = m_functions.getModel();
+					 DefaultListModel<String> new_functions = new DefaultListModel<String>();
+					 
+					 for(int i = 0; i < old_functions.getSize(); i++) {
+						 new_functions.addElement(old_functions.getElementAt(i).toString());
+					 }
+					 
+					 new_functions.addElement(s);
+					 m_functions.setModel(new_functions);
+				 } catch (Exception ex) {
+					 JOptionPane.showMessageDialog(m_frame, "Fonction non reconnu");
+				 }
+			 }
+			
+			
+		} else {
+			//Removee functions in the grapher
+			List<String> to_remove = m_functions.getSelectedValuesList();
+			for(String function : to_remove) {
+				m_grapher.remove(function);
+			}
+			
+			//Remove functions in the JList
+			ListModel<String> functions = m_functions.getModel();
+			DefaultListModel<String> new_functions = new DefaultListModel<String>();
+			for(int i = 0; i < functions.getSize(); i++) {
+				if (!to_remove.contains(functions.getElementAt(i).toString())) {
+					new_functions.addElement(functions.getElementAt(i).toString());
+				}
+			}
+			
+		
+			m_functions.setModel(new_functions);
+		}
+	}
+		
 }
