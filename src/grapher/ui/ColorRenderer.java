@@ -35,9 +35,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JTable;
 import javax.swing.border.Border;
-import javax.swing.table.TableCellRenderer;
 import java.awt.Color;
 import java.awt.Component;
 
@@ -75,7 +73,9 @@ public class ColorRenderer extends JLabel
                 setBorder(unselectedBorder);
             }
         }
-        setToolTipText("RGB value: " + newColor.getRed() + ", " + newColor.getGreen() + ", " + newColor.getBlue());
+        if (newColor!=null) {
+			setToolTipText("RGB value: " + newColor.getRed() + ", " + newColor.getGreen() + ", " + newColor.getBlue());
+        }
         return this;
     }
 }
