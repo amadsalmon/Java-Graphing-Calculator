@@ -62,22 +62,35 @@ public class Interaction
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Point p = new Point(e.getX(), e.getY());
-		if (e.getButton() == MouseEvent.BUTTON1)
-			m_grapher.zoom(p, 5);
-		else if (e.getButton() == MouseEvent.BUTTON3)
-			m_grapher.zoom(p, -5);
+		Point p = new Point(e.getX(), e.getY()); 
+		int button = e.getButton();
+		
+		switch (button) {
+			case MouseEvent.BUTTON1:
+				m_grapher.zoom(p, 5);
+				break;
+			case MouseEvent.BUTTON3:
+				m_grapher.zoom(p, -5);
+				break;
+			default:;
+		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (e.getButton() == MouseEvent.BUTTON1) {
+		int button = e.getButton();
+		
+		switch (button) {
+		case MouseEvent.BUTTON1:
 			m_frame.setCursor(new Cursor(Cursor.HAND_CURSOR));
 			m_button = MouseEvent.BUTTON1;
-		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			break;
+		case MouseEvent.BUTTON3:
 			m_frame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 			m_button = MouseEvent.BUTTON3;
 			m_start = new Point(e.getX(), e.getY());
+			break;
+		default:;
 		}
 	}
 
