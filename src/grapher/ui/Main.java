@@ -33,14 +33,10 @@ public class Main extends JFrame {
 		}
 		
 		Interaction i = new Interaction(grapher,this);
+		grapher.setInteraction(i);
 		JList<String> functions = new JList<String>(expressions);
 		i.addFunctions(functions);
 		
-		grapher.setInteraction(i);
-		grapher.addMouseListener(i);
-		grapher.addMouseMotionListener(i);
-		grapher.addMouseWheelListener(i);
-		functions.addListSelectionListener(i);
 		
 		//ToolBar and its buttons
 		JToolBar toolBar = new JToolBar();
@@ -53,8 +49,6 @@ public class Main extends JFrame {
 		JButton minusButton = new JButton("-");
 		toolBar.add(addButton);
 		toolBar.add(minusButton);
-		addButton.addActionListener(i);
-		minusButton.addActionListener(i);
 		
 		//MenuBar and its items
 		JMenuBar menuBar = new JMenuBar();
@@ -62,10 +56,10 @@ public class Main extends JFrame {
 		JMenu expression = new JMenu("Expression");
 		
 		JMenuItem addExp = new JMenuItem("Add...");
-		addExp.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		addExp.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		
 		JMenuItem removeExp = new JMenuItem("Remove");
-		removeExp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		removeExp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		
 		addExp.addActionListener(i);
 		removeExp.addActionListener(i);
@@ -86,6 +80,14 @@ public class Main extends JFrame {
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitPane.add(splitPaneLeft);
 		splitPane.add(grapher);
+		
+		//Set Listener
+		grapher.addMouseListener(i);
+		grapher.addMouseMotionListener(i);
+		grapher.addMouseWheelListener(i);
+		functions.addListSelectionListener(i);
+		addButton.addActionListener(i);
+		minusButton.addActionListener(i);
 		
 		add(splitPane);
 		pack();
