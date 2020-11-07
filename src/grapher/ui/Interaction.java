@@ -188,7 +188,7 @@ public class Interaction
 		} else if (actionCommand == "+" || actionCommand == "Add expression") {
 			String s = (String) JOptionPane.showInputDialog(m_frame,
 					"What mathematical function do you wish to add to the graph?\n "
-							+ "Please type its standard name followed by \"(x)\", all in lowercase.",
+							+ "Please type its standard expression in lowercase, with x as its unique variable.",
 					"Add a function to graph", JOptionPane.PLAIN_MESSAGE);
 
 			// If a string was returned, say so.
@@ -200,6 +200,7 @@ public class Interaction
 				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(m_frame, "Unknown expression. Please try again.", "Inane error",
 							JOptionPane.ERROR_MESSAGE);
+					System.err.println("Unknown expression resulted in an exception: " + e2);
 				}
 			}
 		} else {

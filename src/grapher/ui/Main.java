@@ -132,7 +132,7 @@ public class Main extends JFrame {
 		final String[] expressions = new String[] {"cos(x)", "x*x", "atan(x)"};
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() { 
-				new Main("grapher", expressions).setVisible(true); 
+				new Main("Grapher", expressions).setVisible(true); 
 			}
 		});
 	}
