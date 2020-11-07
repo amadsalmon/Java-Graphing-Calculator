@@ -2,6 +2,8 @@ package grapher.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
@@ -27,7 +30,7 @@ public class Main extends JFrame {
 		
 		/****************  MENU BAR  ****************/
 		JMenuBar menuBar;
-		JMenu menu, submenu;
+		JMenu menu;
 		JMenuItem menuItemAdd, menuItemRemove;
 
 		// Create the menu bar.
@@ -37,8 +40,10 @@ public class Main extends JFrame {
 		menu = new JMenu("Expressions");
 		menuBar.add(menu);
 		menuItemAdd = new JMenuItem("Add expression");
+		menuItemAdd.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		menu.add(menuItemAdd);
 		menuItemRemove = new JMenuItem("Remove selected expression");
+		menuItemRemove.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		menu.add(menuItemRemove);
 		setJMenuBar(menuBar);		
 		// TODO Amad: Add 'Options' tab for the following setting: "Cell selection: single, multiple, etc".
