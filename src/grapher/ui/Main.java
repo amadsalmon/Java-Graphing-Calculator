@@ -21,6 +21,7 @@ public class Main extends JFrame {
 	Main(String title, String[] expressions) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		
 		
 		
