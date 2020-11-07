@@ -167,7 +167,8 @@ public class Interaction
 				if (indexOfSelectedFunction != -1) { // only if selectedFunction was successfully found
 					m_grapher.model.removeRow(indexOfSelectedFunction);
 					m_grapher.m_selectedFunction = null;
-
+					m_grapher.model.fireTableRowsDeleted(indexOfSelectedFunction, indexOfSelectedFunction);
+					
 					uiUpdateNeeded = true;
 				}
 			}
@@ -181,6 +182,7 @@ public class Interaction
 			if ((s != null) && (s.length() > 0)) {
 				try {
 					m_grapher.add(s);
+					m_grapher.model.fireTableDataChanged();
 					uiUpdateNeeded = true;
 				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(m_frame, "Unknown expression. Please try again.", "Inane error",
