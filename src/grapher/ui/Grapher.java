@@ -91,7 +91,7 @@ public class Grapher extends JPanel {
 		singleVector.add(function);
 		singleVector.add(DEFAULT_CURVE_COLOR);
 		data.addElement(singleVector);
-		;
+
 
 		repaint();
 	}
