@@ -47,11 +47,14 @@ public class Interaction
 		m_end = new Point(0, 0);
 	}
 
+	/**
+	 * Effectue un zoom relatif au taux de scroll et centré sur p le curseur de la
+	 * souris.
+	 */
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		Point p = new Point(e.getX(), e.getY());
-		m_grapher.zoom(p, e.getWheelRotation()); // Effectue un zoom relatif au taux de scroll et centré sur p le
-													// curseur de la souris.
+		m_grapher.zoom(p, e.getWheelRotation());
 	}
 
 	@Override
@@ -116,6 +119,10 @@ public class Interaction
 		m_y = e.getY();
 	}
 
+	/**
+	 * Dessine un rectangle en suivant la diagonale dessinée par la souris entre le
+	 * moment où l'utilisateur presse la souris et son relâchement.
+	 */
 	public void draw(Graphics2D g) {
 		if (m_state == MouseEvent.MOUSE_DRAGGED && m_button == MouseEvent.BUTTON3) {
 			if (m_end.x - m_start.x >= 0 && m_end.y - m_start.y >= 0)
@@ -131,6 +138,9 @@ public class Interaction
 		m_grapher.repaint();
 	}
 
+	/**
+	 * Est invoquée lorsqu'une nouvelle cellule en barre latérale est selectionnée.
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (m_listSelectionModel.getSelectedIndices().length > 0) {
@@ -154,9 +164,12 @@ public class Interaction
 		}
 	}
 
+	/**
+	 * Méthode invoquée lors de l'actionnement d'un bouton de l'interface graphique.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		boolean uiUpdateNeeded = false; // State boolean to limit useless but costly UI updates.
+		boolean uiUpdateNeeded = false; // Boolean state to limit useless though costly UI updates.
 
 		String actionCommand = e.getActionCommand();
 		if (actionCommand == "-" || actionCommand == "Remove selected expression") {

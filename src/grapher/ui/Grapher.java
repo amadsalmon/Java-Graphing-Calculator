@@ -56,7 +56,7 @@ public class Grapher extends JPanel {
 	Vector<Vector<Object>> data; // used for data from database
 	Vector<String> header; // used to store data header
 	DefaultTableModel model;
-	
+
 	protected Interaction m_interaction;
 
 	public Grapher() {
@@ -288,11 +288,17 @@ public class Grapher extends JPanel {
 		ymax = max(y0, y1);
 		repaint();
 	}
-	
+
 	/**
-	 * Returns index of function f in data.
-	 * @return -1 if f was not found in data.
-	 * */
+	 * 
+	 * This method will look for the index of the vector in data which contains the
+	 * function f. This method is necessary because data is a Vector of
+	 * Vector<Object>.
+	 * 
+	 * @param f : the function (of class Function) that is searched for.
+	 * @return index of f in data if found, -1 otherwise.
+	 * @author amadsalmon
+	 */
 	public int indexOfFunction(Function f) {
 		Vector<Vector<Object>> v = this.data;
 		for (int i = 0; i < v.size(); i++) {

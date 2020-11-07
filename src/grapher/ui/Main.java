@@ -40,7 +40,6 @@ public class Main extends JFrame {
 		menuItemRemove = new JMenuItem("Remove selected expression");
 		menu.add(menuItemRemove);
 		setJMenuBar(menuBar);		
-		
 		// TODO Amad: Add 'Options' tab for the following setting: "Cell selection: single, multiple, etc".
 		
 		
@@ -124,7 +123,7 @@ public class Main extends JFrame {
 		
 		
 		
-		
+		/****************  WINDOW & CONTAINER  ****************/
 		add(splitPane);
 		pack();
 	}
