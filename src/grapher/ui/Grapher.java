@@ -196,9 +196,9 @@ public class Grapher extends JPanel {
 		for (BigDecimal y = ystep.negate(); y.doubleValue() > ymin; y = y.subtract(ystep)) {
 			drawYTick(g2, y);
 		}
-		g2.setStroke(DEFAULT_STROKE);
 		g2.setColor(DEFAULT_COLOR);
-		m_interaction.draw(g2);
+		g2.setStroke(DASH_STROKE);
+		m_interaction.paint(g2, W, H);
 	}
 
 	protected double dx(int dX) {
