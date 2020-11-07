@@ -288,5 +288,18 @@ public class Grapher extends JPanel {
 		ymax = max(y0, y1);
 		repaint();
 	}
-
+	
+	/**
+	 * Returns index of function f in data.
+	 * @return -1 if f was not found in data.
+	 * */
+	public int indexOfFunction(Function f) {
+		Vector<Vector<Object>> v = this.data;
+		for (int i = 0; i < v.size(); i++) {
+			if (v.get(i).get(0) == f) {
+				return i;
+			}
+		}
+		return -1;
+	}
 }

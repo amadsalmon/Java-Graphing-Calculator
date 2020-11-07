@@ -163,11 +163,13 @@ public class Interaction
 			// TODO (Amad): make it impossible to click the minus button if no function is
 			// selected in the listScrollPane.
 			if (m_grapher.m_selectedFunction != null) {
-				int indexOfSelectedFunction = m_grapher.model.getDataVector().indexOf(m_grapher.m_selectedFunction);
-				m_grapher.model.removeRow(indexOfSelectedFunction);
-				m_grapher.m_selectedFunction = null;
-				
-			    uiUpdateNeeded = true;
+				int indexOfSelectedFunction = m_grapher.indexOfFunction(m_grapher.m_selectedFunction);
+				if (indexOfSelectedFunction != -1) { // only if selectedFunction was successfully found
+					m_grapher.model.removeRow(indexOfSelectedFunction);
+					m_grapher.m_selectedFunction = null;
+
+					uiUpdateNeeded = true;
+				}
 			}
 		} else if (actionCommand == "+" || actionCommand == "Add expression") {
 			String s = (String) JOptionPane.showInputDialog(m_frame,
