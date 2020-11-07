@@ -14,6 +14,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -31,17 +32,19 @@ public class Interaction
 	JScrollPane m_listScrollPane;
 	ListSelectionModel m_listSelectionModel;
 	JFrame m_frame;
+	JButton m_minusButton;
 	int m_x, m_y;
 	int m_button;
 	int m_state;
 	Point m_start, m_end;
 
 	public Interaction(JScrollPane scrollListView, ListSelectionModel listSelectionModel, Grapher grapher,
-			JFrame frame) {
+			JFrame frame, JButton minusButton) {
 		m_grapher = grapher;
 		m_listScrollPane = scrollListView;
 		m_listSelectionModel = listSelectionModel;
 		m_frame = frame;
+		m_minusButton = minusButton;
 		m_button = MouseEvent.NOBUTTON;
 		m_start = new Point(0, 0);
 		m_end = new Point(0, 0);
@@ -160,7 +163,10 @@ public class Interaction
 
 			}
 			m_grapher.m_selectedFunction = selectedFunction;
-			m_grapher.repaint(); // AMAD: Should a repaint be allowed to get called from there?
+			if (m_grapher.m_selectedFunction != null) {
+				m_minusButton.setEnabled(true);
+			}
+			m_grapher.repaint();
 		}
 	}
 
@@ -181,7 +187,7 @@ public class Interaction
 					m_grapher.model.removeRow(indexOfSelectedFunction);
 					m_grapher.m_selectedFunction = null;
 					m_grapher.model.fireTableRowsDeleted(indexOfSelectedFunction, indexOfSelectedFunction);
-					
+					m_minusButton.setEnabled(false);
 					uiUpdateNeeded = true;
 				}
 			}

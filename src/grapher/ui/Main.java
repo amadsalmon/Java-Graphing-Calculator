@@ -76,7 +76,7 @@ public class Main extends JFrame {
 	    JButton plusButton = new JButton("+");
 	    toolbar.add(minusButton);
 	    toolbar.add(plusButton);	    
-	    // TODO (Amad): minusButton.setEnabled(false); // make '-' button unclickable at first, as there isn't any selected function by default that can be deleted
+	    minusButton.setEnabled(false); // make '-' button unclickable at first, as there isn't any selected function by default that can be deleted
 
 	    /***  FULL LEFT PANE  ***/
 	    JPanel leftPanel = new JPanel(new BorderLayout());
@@ -107,7 +107,7 @@ public class Main extends JFrame {
 		
 		
 		/****************  ACTION LISTENING  ********/
-		Interaction i = new Interaction(scrollListView, listSelectionModel, grapher, this);
+		Interaction i = new Interaction(scrollListView, listSelectionModel, grapher, this, minusButton);
 
 		grapher.setInteraction(i);
 		grapher.addMouseListener(i);
