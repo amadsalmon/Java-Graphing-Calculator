@@ -2,6 +2,7 @@ package grapher.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
@@ -86,7 +87,9 @@ public class Main extends JFrame {
 	    toolbar.add(minusButton);
 	    toolbar.add(plusButton);	    
 	    minusButton.setEnabled(false); // make '-' button unclickable at first, as there isn't any selected function by default that can be deleted
-
+	    toolbar.setLayout(new FlowLayout());
+	    
+	    
 	    /***  FULL LEFT PANE  ***/
 	    JPanel leftPanel = new JPanel(new BorderLayout());
 	    leftPanel.setOpaque(true);
