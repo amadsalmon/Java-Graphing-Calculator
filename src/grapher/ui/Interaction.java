@@ -159,7 +159,7 @@ public class Interaction
 		boolean uiUpdateNeeded = false; // State boolean to limit useless but costly UI updates.
 
 		String actionCommand = e.getActionCommand();
-		if (actionCommand == "-" || actionCommand == "Remove expression") {
+		if (actionCommand == "-" || actionCommand == "Remove selected expression") {
 			// TODO (Amad): make it impossible to click the minus button if no function is
 			// selected in the listScrollPane.
 			if (m_grapher.m_selectedFunction != null) {
