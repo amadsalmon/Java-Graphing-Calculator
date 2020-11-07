@@ -22,6 +22,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import grapher.fc.Function;
+import grapher.fc.FunctionFactory;
 
 public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener, ListSelectionListener, ActionListener {
 
@@ -130,7 +131,19 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		int selectedIndex = m_listSelectionModel.getSelectedIndices()[0];
-		Function selectedFunction = (Function) m_grapher.model.getValueAt(selectedIndex, 0);
+		
+		Function selectedFunction = null;
+		Object objectToEvaluate = m_grapher.model.getValueAt(selectedIndex, 0);
+		if (objectToEvaluate instanceof String) {
+			selectedFunction = FunctionFactory.createFunction((String) objectToEvaluate);
+		} else {
+			try {
+				selectedFunction = (Function) objectToEvaluate;
+			} catch (ClassCastException e2) {
+				System.out.println("Interaction.valueChanged - Cast Exception: " + e);
+			}
+			
+		}
 		m_grapher.m_selectedFunction = selectedFunction;
 		m_grapher.repaint(); // AMAD: Should a repaint be allowed to get called from there?
 	}
