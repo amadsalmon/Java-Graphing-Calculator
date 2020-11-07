@@ -41,8 +41,6 @@ public class Grapher extends JPanel {
 	static final Color SELECTED_CURVE_COLOR = new Color(0, 0, 255);
 	static final Color GRID_COLOR = new Color(102, 102, 102);
 
-	protected Interaction m_interaction;
-
 	protected int W = 1080;
 	protected int H = 720;
 
@@ -58,6 +56,8 @@ public class Grapher extends JPanel {
 	Vector<Vector<Object>> data; // used for data from database
 	Vector<String> header; // used to store data header
 	DefaultTableModel model;
+	
+	protected Interaction m_interaction;
 
 	public Grapher() {
 		xmin = -PI / 2.;

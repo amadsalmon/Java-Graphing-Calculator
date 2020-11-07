@@ -62,7 +62,8 @@ public class Main extends JFrame {
 	    
 		//Create the scroll pane and add the table to it.
 		JScrollPane scrollListView = new JScrollPane(table);
-		ListSelectionModel listSelectionModel = table.getSelectionModel();	
+		ListSelectionModel listSelectionModel = table.getSelectionModel();	// TODO Amad : make this better
+
 		//Set up renderer and editor for the Color column.
 		TableColumn colorColumn = table.getColumnModel().getColumn(1);
 		colorColumn.setCellRenderer(new ColorRenderer(true));
@@ -118,6 +119,11 @@ public class Main extends JFrame {
 		plusButton.addActionListener(i);
 		menuItemAdd.addActionListener(i);
 		menuItemRemove.addActionListener(i);
+	
+		
+		
+		
+		
 		
 		add(splitPane);
 		pack();

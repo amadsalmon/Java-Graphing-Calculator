@@ -24,7 +24,8 @@ import javax.swing.event.ListSelectionListener;
 import grapher.fc.Function;
 import grapher.fc.FunctionFactory;
 
-public class Interaction implements MouseListener, MouseWheelListener, MouseMotionListener, ListSelectionListener, ActionListener {
+public class Interaction
+		implements MouseListener, MouseWheelListener, MouseMotionListener, ListSelectionListener, ActionListener {
 
 	Grapher m_grapher;
 	JScrollPane m_listScrollPane;
@@ -35,20 +36,22 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 	int m_state;
 	Point m_start, m_end;
 
-	public Interaction(JScrollPane scrollListView, ListSelectionModel listSelectionModel, Grapher grapher, JFrame frame) {
+	public Interaction(JScrollPane scrollListView, ListSelectionModel listSelectionModel, Grapher grapher,
+			JFrame frame) {
 		m_grapher = grapher;
 		m_listScrollPane = scrollListView;
 		m_listSelectionModel = listSelectionModel;
 		m_frame = frame;
 		m_button = MouseEvent.NOBUTTON;
-		m_start = new Point(0,0);
-		m_end = new Point(0,0);
+		m_start = new Point(0, 0);
+		m_end = new Point(0, 0);
 	}
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		Point p = new Point(e.getX(), e.getY());
-		m_grapher.zoom(p, e.getWheelRotation()); // Effectue un zoom relatif au taux de scroll et centré sur p le curseur de la souris. 
+		m_grapher.zoom(p, e.getWheelRotation()); // Effectue un zoom relatif au taux de scroll et centré sur p le
+													// curseur de la souris.
 	}
 
 	@Override
@@ -99,10 +102,10 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 	public void mouseDragged(MouseEvent e) {
 		if (m_button == MouseEvent.BUTTON1)
 			m_grapher.translate(-m_x + e.getX(), -m_y + e.getY());
-		
+
 		m_x = e.getX();
 		m_y = e.getY();
-		
+
 		m_end.setLocation(m_x, m_y);
 		m_state = MouseEvent.MOUSE_DRAGGED;
 	}
@@ -112,10 +115,10 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 		m_x = e.getX();
 		m_y = e.getY();
 	}
-	
+
 	public void draw(Graphics2D g) {
-		if(m_state == MouseEvent.MOUSE_DRAGGED && m_button == MouseEvent.BUTTON3) {
-			if(m_end.x - m_start.x >= 0 && m_end.y - m_start.y >= 0)
+		if (m_state == MouseEvent.MOUSE_DRAGGED && m_button == MouseEvent.BUTTON3) {
+			if (m_end.x - m_start.x >= 0 && m_end.y - m_start.y >= 0)
 				g.drawRect(m_start.x, m_start.y, m_end.x - m_start.x, m_end.y - m_start.y);
 			else if (m_end.x - m_start.x < 0 && m_end.y - m_start.y >= 0) {
 				g.drawRect(m_end.x, m_start.y, m_start.x - m_end.x, m_end.y - m_start.y);
@@ -130,31 +133,35 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		int selectedIndex = m_listSelectionModel.getSelectedIndices()[0];
-		
-		Function selectedFunction = null;
-		Object objectToEvaluate = m_grapher.model.getValueAt(selectedIndex, 0);
-		if (objectToEvaluate instanceof String) {
-			selectedFunction = FunctionFactory.createFunction((String) objectToEvaluate);
-		} else {
-			try {
-				selectedFunction = (Function) objectToEvaluate;
-			} catch (ClassCastException e2) {
-				System.out.println("Interaction.valueChanged - Cast Exception: " + e);
+		if (m_listSelectionModel.getSelectedIndices().length > 0) {
+
+			int selectedIndex = m_listSelectionModel.getSelectedIndices()[0];
+
+			Function selectedFunction = null;
+			Object objectToEvaluate = m_grapher.model.getValueAt(selectedIndex, 0);
+			if (objectToEvaluate instanceof String) {
+				selectedFunction = FunctionFactory.createFunction((String) objectToEvaluate);
+			} else {
+				try {
+					selectedFunction = (Function) objectToEvaluate;
+				} catch (ClassCastException e2) {
+					System.out.println("Interaction.valueChanged - Cast Exception: " + e);
+				}
+
 			}
-			
+			m_grapher.m_selectedFunction = selectedFunction;
+			m_grapher.repaint(); // AMAD: Should a repaint be allowed to get called from there?
 		}
-		m_grapher.m_selectedFunction = selectedFunction;
-		m_grapher.repaint(); // AMAD: Should a repaint be allowed to get called from there?
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		boolean uiUpdateNeeded = false; // State boolean to limit useless but costly UI updates.
-		
+
 		String actionCommand = e.getActionCommand();
 		if (actionCommand == "-" || actionCommand == "Remove expression") {
-			// TODO (Amad): make it impossible to click the minus button if no function is selected in the listScrollPane.
+			// TODO (Amad): make it impossible to click the minus button if no function is
+			// selected in the listScrollPane.
 			if (m_grapher.m_selectedFunction != null) {
 				int indexOfSelectedFunction = m_grapher.model.getDataVector().indexOf(m_grapher.m_selectedFunction);
 				m_grapher.model.removeRow(indexOfSelectedFunction);
@@ -163,12 +170,10 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 			    uiUpdateNeeded = true;
 			}
 		} else if (actionCommand == "+" || actionCommand == "Add expression") {
-			String s = (String) JOptionPane.showInputDialog(
-                    m_frame,
-                    "What mathematical function do you wish to add to the graph?\n "
-                    + "Please type its standard name followed by \"(x)\", all in lowercase.",
-                    "Add a function to graph",
-                    JOptionPane.PLAIN_MESSAGE);
+			String s = (String) JOptionPane.showInputDialog(m_frame,
+					"What mathematical function do you wish to add to the graph?\n "
+							+ "Please type its standard name followed by \"(x)\", all in lowercase.",
+					"Add a function to graph", JOptionPane.PLAIN_MESSAGE);
 
 			// If a string was returned, say so.
 			if ((s != null) && (s.length() > 0)) {
@@ -176,17 +181,15 @@ public class Interaction implements MouseListener, MouseWheelListener, MouseMoti
 					m_grapher.add(s);
 					uiUpdateNeeded = true;
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(m_frame,
-						    "Unknown expression. Please try again.",
-						    "Inane error",
-						    JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(m_frame, "Unknown expression. Please try again.", "Inane error",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		} else {
-			System.out.println("Unhandled ActionEvent:"+'\n'+e);
+			System.err.println("Unhandled ActionEvent:" + '\n' + e);
 		}
-		
-		if (uiUpdateNeeded) {			
+
+		if (uiUpdateNeeded) {
 			m_grapher.repaint();
 		}
 	}
