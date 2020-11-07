@@ -26,6 +26,9 @@ import grapher.fc.Function;
 import grapher.fc.FunctionFactory;
 
 public class Grapher extends JPanel {
+	
+	private static final long serialVersionUID = 4881504888613379968L;
+	
 	static final int MARGIN = 40;
 	static final int STEP = 5;
 

@@ -21,6 +21,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 
 public class Main extends JFrame {
+
+	private static final long serialVersionUID = 1995697716256600004L;
+
 	Main(String title, String[] expressions) {
 		super(title);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
