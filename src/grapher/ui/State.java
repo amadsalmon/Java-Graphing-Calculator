@@ -13,18 +13,29 @@ public enum State {
 		State release(MouseEvent e) {
 			return UP;
 		}
-	},
-	DRAG {
+		
 		State move(MouseEvent e) {
 			return DRAG;
 		}
-		
+	},
+	DRAG {
 		State release(MouseEvent e) {
 			return UP;
 		}
-	},
-	CLIC_OR_DRAG{
 		
+		State move(MouseEvent e) {
+			return DRAG;
+		}
 	};
 
+	static Interaction inter;
+	static State init(Interaction i) {
+		inter = i;
+		return UP;
+	}
+	
+	State press(MouseEvent e) { throw new RuntimeException(); } 
+	State move(MouseEvent e) { throw new RuntimeException(); }
+	State release(MouseEvent e) { throw new RuntimeException(); }
+	
 }
