@@ -31,7 +31,6 @@ public class Main extends JFrame {
 		System.setProperty("apple.laf.useScreenMenuBar", "true");
 		
 		
-		
 		/****************  MENU BAR  ****************/
 		JMenuBar menuBar;
 		JMenu menu;
@@ -50,8 +49,6 @@ public class Main extends JFrame {
 		menuItemRemove.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()));
 		menu.add(menuItemRemove);
 		setJMenuBar(menuBar);		
-		// TODO Amad: Add 'Options' tab for the following setting: "Cell selection: single, multiple, etc".
-		
 		
 		
 		/****************  RIGHT PANE  ****************/
@@ -60,10 +57,7 @@ public class Main extends JFrame {
 			grapher.add(expression);
 		}
 		
-		
-		
-		
-		
+			
 		/****************  LEFT PANE  ****************/
 		/***  Scroll list view  ***/
 	    JTable table = new JTable(grapher.model);
@@ -71,7 +65,7 @@ public class Main extends JFrame {
 	    
 		//Create the scroll pane and add the table to it.
 		JScrollPane scrollListView = new JScrollPane(table);
-		ListSelectionModel listSelectionModel = table.getSelectionModel();	// TODO Amad : make this better
+		ListSelectionModel listSelectionModel = table.getSelectionModel();
 
 		//Set up renderer and editor for the Color column.
 		TableColumn colorColumn = table.getColumnModel().getColumn(1);
@@ -86,7 +80,7 @@ public class Main extends JFrame {
 	    JButton plusButton = new JButton("+");
 	    toolbar.add(minusButton);
 	    toolbar.add(plusButton);	    
-	    minusButton.setEnabled(false); // make '-' button unclickable at first, as there isn't any selected function by default that can be deleted
+	    minusButton.setEnabled(false);
 	    toolbar.setLayout(new FlowLayout());
 	    
 	    
@@ -95,9 +89,6 @@ public class Main extends JFrame {
 	    leftPanel.setOpaque(true);
 		leftPanel.add(scrollListView, BorderLayout.CENTER);
 		leftPanel.add(toolbar, BorderLayout.SOUTH);
-		
-		
-		
 		
 		
 		/****************  SPLIT PANE  ****************/
@@ -115,8 +106,6 @@ public class Main extends JFrame {
 		grapher.setMinimumSize(minimumSize2);
 		splitPane.setOpaque(true);	
 	    
-	    
-		
 		
 		/****************  ACTION LISTENING  ********/
 		Interaction i = new Interaction(scrollListView, listSelectionModel, grapher, this, minusButton);
@@ -130,9 +119,6 @@ public class Main extends JFrame {
 		plusButton.addActionListener(i);
 		menuItemAdd.addActionListener(i);
 		menuItemRemove.addActionListener(i);
-	
-		
-		
 		
 		
 		/****************  WINDOW & CONTAINER  ****************/

@@ -53,8 +53,7 @@ public class Grapher extends JPanel {
 	protected int m_rectX, m_rectY, m_rectW, m_rectH;
 	protected boolean m_drawR;
 
-	public Function m_selectedFunction; // TODO (Amad): make it a list of selected functions as it is possible to select
-										// mutliple sidelistitems
+	protected String m_selectedFunction; 
 
 	Vector<Vector<Object>> data; // used for data from database
 	Vector<String> header; // used to store data header
@@ -91,7 +90,6 @@ public class Grapher extends JPanel {
 		singleVector.add(function);
 		singleVector.add(DEFAULT_CURVE_COLOR);
 		data.addElement(singleVector);
-
 
 		repaint();
 	}
@@ -163,7 +161,8 @@ public class Grapher extends JPanel {
 			for (int j = 0; j < N; j++) {
 				Ys[j] = Y(functionToGraph.y(xs[j]));
 			}
-			if (functionToGraph == m_selectedFunction) {
+			if (m_selectedFunction != null &&
+			   functionToGraph.toString().contentEquals(m_selectedFunction)) {
 				g2.setStroke(SELECTED_CURVE_STROKE);
 			}
 			g2.drawPolyline(Xs, Ys, N);
@@ -302,10 +301,10 @@ public class Grapher extends JPanel {
 	 * @return index of f in data if found, -1 otherwise.
 	 * @author amadsalmon
 	 */
-	public int indexOfFunction(Function f) {
+	public int indexOfFunction(String f) {
 		Vector<Vector<Object>> v = this.data;
 		for (int i = 0; i < v.size(); i++) {
-			if (v.get(i).get(0) == f) {
+			if (v.get(i).get(0).toString().contentEquals(f)) {
 				return i;
 			}
 		}

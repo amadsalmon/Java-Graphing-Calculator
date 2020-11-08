@@ -1,6 +1,3 @@
-/**
- * 
- */
 package grapher.ui;
 
 import java.awt.Cursor;
@@ -35,7 +32,7 @@ public class Interaction
 	JButton m_minusButton;
 	int m_x, m_y;
 	int m_button;
-	int m_state; //TODO: replace int with real state
+	int m_state;
 	Point m_start, m_end;
 	boolean m_drawR;
 
@@ -205,11 +202,11 @@ public class Interaction
 				}
 
 			}
-			m_grapher.m_selectedFunction = selectedFunction;
+			m_grapher.m_selectedFunction = selectedFunction.toString();
+			
 			if (m_grapher.m_selectedFunction != null) {
 				m_minusButton.setEnabled(true);
 			}
-			m_grapher.repaint();
 		}
 	}
 
@@ -218,12 +215,8 @@ public class Interaction
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		boolean uiUpdateNeeded = false; // Boolean state to limit useless though costly UI updates.
-
 		String actionCommand = e.getActionCommand();
 		if (actionCommand == "-" || actionCommand == "Remove selected expression") {
-			// TODO (Amad): make it impossible to click the minus button if no function is
-			// selected in the listScrollPane.
 			if (m_grapher.m_selectedFunction != null) {
 				int indexOfSelectedFunction = m_grapher.indexOfFunction(m_grapher.m_selectedFunction);
 				if (indexOfSelectedFunction != -1) { // only if selectedFunction was successfully found
@@ -231,7 +224,6 @@ public class Interaction
 					m_grapher.m_selectedFunction = null;
 					m_grapher.model.fireTableRowsDeleted(indexOfSelectedFunction, indexOfSelectedFunction);
 					m_minusButton.setEnabled(false);
-					uiUpdateNeeded = true;
 				}
 			}
 		} else if (actionCommand == "+" || actionCommand == "Add expression") {
@@ -245,7 +237,6 @@ public class Interaction
 				try {
 					m_grapher.add(s);
 					m_grapher.model.fireTableDataChanged();
-					uiUpdateNeeded = true;
 				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(m_frame, "Unknown expression. Please try again.", "Inane error",
 							JOptionPane.ERROR_MESSAGE);
@@ -256,9 +247,6 @@ public class Interaction
 			System.err.println("Unhandled ActionEvent:" + '\n' + e);
 		}
 
-		if (uiUpdateNeeded) {
-			m_grapher.repaint();
-		}
 	}
 
 }
